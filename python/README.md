@@ -36,6 +36,7 @@ sw01# python diff.py "show interface tengigabitethernet 19/0/1" "show interface 
 
 ```
 sw01# # python diff.py -l1 f:defaultconfig.novcs f:defaultconfig.vcs                                        --- f:defaultconfig.novcs
+--- f:defaultconfig.novcs
 
 +++ f:defaultconfig.vcs
 
