@@ -13,7 +13,7 @@ def _parseArgs(argv):
     )
     parser.add_argument(
         "command",
-        help="doing commands"
+        help="doing commands. Place holder of port No. in command is `%s'."
     )
     parser.add_argument(
         "fq_ports",

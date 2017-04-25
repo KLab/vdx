@@ -148,3 +148,33 @@ sw01# python3 sample__port_parse_and_compose.py --rids-pattern ?[12] --ports 1
 sw01# python3 sample__port_parse_and_compose.py --rids 11 --ports 1,2 23/0/1
 ['11/0/1-2', '23/0/1']
 ```
+
+## doit.py
+コマンドラインで指定された CLI コマンドを、指定されたポートに対して実行する。
+
+### 実行例
+* 第１引数に実行したいコマンドを指定します。コマンド中のポート番号の部分は `%s` に置き換えておきます。
+
+```
+h05u# python doit.py "show interface tengigabitethernet  %s | include Discards" 19,29/0/1 19/0/1-2
+Namespace(command='show interface tengigabitethernet  %s | include Discards', fq_ports=['19,29/0/1', '19/0/1-2'], ports=None, rbridgeids=None, rids_pattern=None)
+['19/0/1', '19/0/2', '29/0/1']
+!Command: show interface tengigabitethernet  19/0/1 | include Discards
+!Time: Tue Apr 25 20:49:21 2017
+
+    Errors: 0, Discards: 0
+    Errors: 0, Discards: 0
+
+!Command: show interface tengigabitethernet  19/0/2 | include Discards
+!Time: Tue Apr 25 20:49:21 2017
+
+    Errors: 0, Discards: 0
+    Errors: 0, Discards: 0
+
+!Command: show interface tengigabitethernet  29/0/1 | include Discards
+!Time: Tue Apr 25 20:49:22 2017
+
+    Errors: 0, Discards: 0
+    Errors: 0, Discards: 0
+
+```
