@@ -25,8 +25,8 @@ ex: `10/0/1-3' or `10/0/1,2,3' '''
         help='''RBridgeID, You shuld use this option with `--port'.
 This option is able to specify multiple RBridgeID.
 ex: `-r 10'
-`-b 10,11,12'
-`--rids 10-12' '''
+    `-b 10,11,12'
+    `--rids 10-12' '''
     )
     parser.add_argument(
         "--rids-pattern",
@@ -36,7 +36,7 @@ ex: `-r 10'
         help='''RBridgeID pattern, You shuld use this option with `--port'.
 This option is able to specify multiple RBridgeID by shell style pattern.
 ex: `--rids-pattern 1[89]'
-`--rids-pattern *8' '''
+    `--rids-pattern *8' '''
     )
     parser.add_argument(
         "-p", "--port", "--ports",
@@ -46,8 +46,8 @@ ex: `--rids-pattern 1[89]'
         help='''Port No. You shuld use this option with `--rids' or `--rids-pattern'.
 This option is able to specify multiple port No.
 ex: `-p 1'
-`--port 1,2,3'
-`--ports 1-3' '''
+    `--port 1,2,3'
+    `--ports 1-3' '''
     )
 
     args = parser.parse_args(argv)
