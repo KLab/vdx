@@ -156,7 +156,7 @@ sw01# python3 sample__port_parse_and_compose.py --rids 11 --ports 1,2 23/0/1
 * 第１引数に実行したいコマンドを指定します。コマンド中のポート番号の部分は `%s` に置き換えておきます。
 
 ```
-h05u# python doit.py "show interface tengigabitethernet  %s | include Discards" 19,29/0/1 19/0/1-2
+sw01# python doit.py "show interface tengigabitethernet  %s | include Discards" 19,29/0/1 19/0/1-2
 Namespace(command='show interface tengigabitethernet  %s | include Discards', fq_ports=['19,29/0/1', '19/0/1-2'], ports=None, rbridgeids=None, rids_pattern=None)
 ['19/0/1', '19/0/2', '29/0/1']
 !Command: show interface tengigabitethernet  19/0/1 | include Discards
@@ -177,4 +177,97 @@ Namespace(command='show interface tengigabitethernet  %s | include Discards', fq
     Errors: 0, Discards: 0
     Errors: 0, Discards: 0
 
+```
+
+## checkcounter.py
+指定されたポートに対して `show interface` を発行し、結果の中から下記の数値を拾って１行に表示する。
+* Receive Statistics から
+  * Errors
+  * Discards
+* Transmit Statistics から
+  * Errors
+  * Discards
+* Rate info から
+  * Input の帯域、パケット帯域、帯域消費率
+  * Output の帯域、パケット帯域、帯域消費率
+
+### オプション
+```
+usage: checkcounter.py [-h] [-d] [-i int] [-c int] [-r RBridgeID]
+                       [--rids-pattern RBridgeID_pattern] [-p PortNo.]
+                       [RBridgeID/0/PortNo [RBridgeID/0/PortNo ...]]
+
+check port counters
+
+positional arguments:
+  RBridgeID/0/PortNo    VDX style port specification. You can spefy multiple ports.
+                        ex: `10/0/1-3' or `10/0/1,2,3'
+
+                        Also, you can specify multiple rbridge ID
+                        ex: `10,20/0/3' or `10-12/0/3'
+                            `[12]0/0/3' or `1*/0/3'
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --debug           enables debug print
+  -i int, --interval int
+                        loop interval, in second. default is 3
+  -c int, --count int   
+                        loop iteration count. if 0 is specified, loops infinitly. default is 1
+  -r RBridgeID, -b RBridgeID, --rids RBridgeID
+                        RBridgeID, You shuld use this option with `--port'.
+                        This option is able to specify multiple RBridgeID.
+                        ex: `-r 10'
+                            `-b 10,11,12'
+                            `--rids 10-12'
+  --rids-pattern RBridgeID_pattern
+                        RBridgeID pattern, You shuld use this option with `--port'.
+                        This option is able to specify multiple RBridgeID by shell style pattern.
+                        ex: `--rids-pattern 1[89]'
+                            `--rids-pattern *8'
+  -p PortNo., --port PortNo., --ports PortNo.
+                        Port No. You shuld use this option with `--rids' or `--rids-pattern'.
+                        This option is able to specify multiple port No.
+                        ex: `-p 1'
+                            `--port 1,2,3'
+                            `--ports 1-3'
+```
+
+* `-c` でループ回数の指定ができる。`0` を指定すれば無限ループになる(`Ctrl-C`で終了)
+* `-i` でループ間隔を指定できる。デフォルトは３秒間隔
+
+### 実行例
+* ループ１回
+```
+sw01# python checkcounter.py 29/0/29 109/0/28 58-59/0/49-50          
+20:07:51
+port No. R_err R_dsc T_err T_dsc  In_Mbps   In_Kpps InRate Out_Mbps  Out_Kpps O_Rate
+109/0/28     0     0     0     0    0.001     0.001  0.00%    0.000     0.000  0.00%
+ 29/0/29     0     0     0     0    0.000     0.000  0.00%    0.001     0.001  0.00%
+ 58/0/49     0     0     0     0    0.013     0.010  0.00%    0.006     0.007  0.00%
+ 58/0/50     0     0     0     0    0.003     0.003  0.00%    0.006     0.008  0.00%
+ 59/0/49     0     0     0     0    0.004     0.002  0.00%    0.000     0.000  0.00%
+ 59/0/50     0     0     0     0    0.001     0.001  0.00%    0.002     0.001  0.00%
+sw01#
+```
+* ループ２回実行、５秒間隔
+```
+sw01# python checkcounter.py -c2 -i 5 29/0/29 109/0/28 -r 58,59 -p 49-50
+20:09:59
+port No. R_err R_dsc T_err T_dsc  In_Mbps   In_Kpps InRate Out_Mbps  Out_Kpps O_Rate
+109/0/28     0     0     0     0    0.000     0.000  0.00%    0.000     0.000  0.00%
+ 29/0/29     0     0     0     0    0.000     0.000  0.00%    0.000     0.000  0.00%
+ 58/0/49     0     0     0     0    0.000     0.000  0.00%    0.000     0.000  0.00%
+ 58/0/50     0     0     0     0    0.002     0.003  0.00%    0.002     0.002  0.00%
+ 59/0/49     0     0     0     0    0.001     0.002  0.00%    0.001     0.002  0.00%
+ 59/0/50     0     0     0     0    0.002     0.003  0.00%    0.000     0.000  0.00%
+20:10:04
+port No. R_err R_dsc T_err T_dsc  In_Mbps   In_Kpps InRate Out_Mbps  Out_Kpps O_Rate
+109/0/28     0     0     0     0    0.001     0.001  0.00%    0.000     0.000  0.00%
+ 29/0/29     0     0     0     0    0.000     0.000  0.00%    0.001     0.001  0.00%
+ 58/0/49     0     0     0     0    0.522     0.037  0.00%    0.524     0.038  0.00%
+ 58/0/50     0     0     0     0    1.072     0.071  0.00%    1.076     0.077  0.00%
+ 59/0/49     0     0     0     0    0.001     0.001  0.00%    0.000     0.000  0.00%
+ 59/0/50     0     0     0     0    0.002     0.003  0.00%    0.002     0.001  0.00%
+sw01#
 ```
