@@ -26,6 +26,7 @@ Also, you can multiple rbridge ID
 ex: `10,20/0/3' or `10-12/0/3'
     `[12]0/0/3' or `1*/0/3' '''
     )
+    parser.add_argument("-d", dest="debug", action="store_true", help="enables debug print")
     parser.add_argument(
         "-r", "-b", "--rids",
         dest="rbridgeids",
@@ -205,7 +206,8 @@ def _genFqPorts(rbridgeids, ports):
 if __name__ == '__main__':
     args = _parseArgs(sys.argv[1:])
 
-    print(args)
+    if args.debug:
+        print(args)
 
     fqports = None
 
@@ -230,10 +232,14 @@ if __name__ == '__main__':
 
     fqports = sorted(fqports)
 
-    print(fqports)
+    if args.debug:
+        print(fqports)
 
     for fp in fqports:
-        result = CLI(args.command % fp)
+        if re.match(r"[0-9/]*/(?:49|5[012])$", fp):
+            result = CLI(args.command.replace("tengigabitethernet", "fortygigabitethernet") % fp)
+        else:
+            result = CLI(args.command % fp)
 
         for line in result.get_output():
             if re.search('syntax error', line, re.IGNORECASE):
