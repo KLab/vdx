@@ -231,7 +231,7 @@ class infinit:
 
 
 def check_port_counters(fqports, debug=False):
-    print("%8s %5s %5s %5s %5s %8s %9s %6s %8s %9s %6s" %
+    print("%8s %5s %5s %5s %5s %8s %9s %7s %8s %9s %7s" %
           ("port No.", "R_err", "R_dsc", "T_err", "T_dsc",
            "In_Mbps", "In_Kpps", "InRate", "Out_Mbps", "Out_Kpps", "O_Rate"))
 
@@ -274,7 +274,7 @@ def check_port_counters(fqports, debug=False):
                 o_pps = e[3]
                 o_rate = e[5]
 
-        print("%8s %5s %5s %5s %5s %8.3f %9.3f %6s %8.3f %9.3f %6s" %
+        print("%8s %5s %5s %5s %5s %8.3f %9.3f %7s %8.3f %9.3f %7s" %
               (port, r_error, r_discards, t_error, t_discards,
                float(i_Mbps), int(i_pps) / 1000, i_rate,
                float(o_Mbps), int(o_pps) / 1000, o_rate))
