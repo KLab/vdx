@@ -78,7 +78,7 @@ if __name__ == '__main__':
         left = [l.rstrip("\r\n") for l in f]
         f.close()
     else:
-        left = CLI(args.left, do_print=False).get_output()
+        left = CLI(args.left, do_print=False).output.splitlines()
         for line in left:
             if re.search('syntax error', line):
                 print("ERROR occured in left command! Abort!!")
@@ -92,7 +92,7 @@ if __name__ == '__main__':
         right = [l.rstrip("\r\n") for l in f]
         f.close()
     else:
-        right = CLI(args.right, do_print=False).get_output()
+        right = CLI(args.right, do_print=False).output.splitlines()
         for line in right:
             if re.search('syntax error', line):
                 print("ERROR occured in right command! Abort!!")

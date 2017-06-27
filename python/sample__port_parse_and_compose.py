@@ -173,7 +173,7 @@ def _globRidsPattern(patterns):
     vcs = CLI('show vcs', do_print=False)
     target = False
     rids = []
-    for line in vcs.get_output():
+    for line in vcs.output.splitlines():
         if not target:
             if re.match(r'-+$', line):
                 target = True

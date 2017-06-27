@@ -189,7 +189,7 @@ def _globRidsPattern(patterns):
     vcs = CLI('show vcs', do_print=False)
     target = False
     rids = []
-    for line in vcs.get_output():
+    for line in vcs.output.splitlines():
         if not target:
             if re.match(r'-+$', line):
                 target = True
@@ -241,7 +241,7 @@ if __name__ == '__main__':
         else:
             result = CLI(args.command % fp)
 
-        for line in result.get_output():
+        for line in result.output.splitlines():
             if re.search('syntax error', line, re.IGNORECASE):
                 print("ERROR occured! Abort!!")
                 sys.exit()

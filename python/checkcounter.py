@@ -209,7 +209,7 @@ def _globRidsPattern(patterns):
     vcs = CLI('show vcs', do_print=False)
     target = False
     rids = []
-    for line in vcs.get_output():
+    for line in vcs.output.splitlines():
         if not target:
             if re.match(r'-+$', line):
                 target = True
@@ -241,11 +241,11 @@ def check_port_counters(fqports, debug=False):
         else:
             result = CLI("show interface tengigabitethernet " + fp, do_print=False)
 
-        for line in result.get_output():
+        for line in result.output.splitlines():
             if line.find('syntax error') != -1:
                 print("ERROR occured! Abort!!")
                 if debug:
-                    for l in result.get_output():
+                    for l in result.output.splitlines():
                         print(l)
                 sys.exit()
 
