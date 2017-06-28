@@ -13,7 +13,8 @@ def _parseArgs(argv):
     )
     parser.add_argument(
         "command",
-        help="doing commands. Place holder of port No. in command is `%s'."
+        help='''doing commands. Place holder of port No. in command is `%%s'.
+When you specify multiple commands, separate them with `\\n'.'''
     )
     parser.add_argument(
         "fq_ports",
@@ -234,6 +235,8 @@ if __name__ == '__main__':
 
     if args.debug:
         print(fqports)
+
+    import activate_CLI_config
 
     for fp in fqports:
         if re.match(r"[0-9/]*/(?:49|5[012])$", fp):
